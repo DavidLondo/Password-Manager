@@ -1,18 +1,17 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const { validateMasterKey } = require('./security');
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1000,
-    height: 700,
+    width: 800,
+    height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      nodeIntegration: false,
     },
   });
 
-  win.loadURL('http://localhost:5173'); // Vite dev server
+  win.loadURL('http://localhost:5173');
 }
 
 app.whenReady().then(() => {
@@ -21,6 +20,11 @@ app.whenReady().then(() => {
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+});
+
+ipcMain.handle('validate-master-key', async (_event, password) => {
+  const result = await validateMasterKey(password);
+  return result;
 });
 
 app.on('window-all-closed', () => {
