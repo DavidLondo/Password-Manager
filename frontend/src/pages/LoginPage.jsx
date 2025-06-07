@@ -31,23 +31,26 @@ function LoginPage() {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <h1>Gestor de Contraseñas</h1>
-      
-      <input
-        ref={inputRef}
-        type="password"
-        placeholder="Clave maestra"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        autoFocus
-      />
-      
-      <button type="submit">Entrar</button>
-      {error && <p className="error">{error}</p>}
-    </form>
+    <div className="login-container">
+      <form className="form" onSubmit={handleLogin}>
+        <h1>🔐 Gestor de Contraseñas</h1>
+
+        <input
+          ref={inputRef}
+          type="password"
+          placeholder="Clave maestra"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoFocus
+        />
+
+        <button type="submit">Entrar</button>
+        {error && <p className="error">{error}</p>}
+      </form>
+    </div>
   );
+
 }
 
 export default LoginPage;

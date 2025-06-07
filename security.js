@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const argon2 = require('argon2');
 
 const DATA_DIR = path.join(__dirname, 'data');
-const CONFIG_PATH = path.join(DATA_DIR, 'config.json');
+const CONFIG_PATH = path.join(DATA_DIR, 'master.json');
 const PASSWORDS_PATH = path.join(DATA_DIR, 'passwords.json');
 
 // Asegura que la carpeta 'data' exista
