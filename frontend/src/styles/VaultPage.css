@@ -1,0 +1,257 @@
+/* VaultPage.css */
+
+.vault-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.vault-title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 2.5em;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.vault-form {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.vault-input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  flex: 1;
+  min-width: 150px;
+  transition: border 0.3s;
+}
+
+.vault-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.vault-button {
+  padding: 12px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  min-width: 120px;
+}
+
+.vault-button:hover {
+  background-color: #2980b9;
+}
+
+.vault-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.vault-item {
+  background-color: white;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.vault-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.vault-item-site {
+  color: #2c3e50;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.vault-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.vault-action-button {
+  padding: 8px 12px;
+  background-color: transparent;
+  color: #7f8c8d;
+  min-width: auto;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.vault-action-button:hover {
+  background-color: #f1f1f1;
+}
+
+.vault-delete-button:hover {
+  color: #e74c3c;
+}
+
+.vault-edit-button:hover {
+  color: #f39c12;
+}
+
+.vault-save-button:hover {
+  color: #27ae60;
+}
+
+.vault-cancel-button:hover {
+  color: #e74c3c;
+}
+
+.vault-edit-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.vault-edit-input {
+  flex: 1;
+  min-width: 120px;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.vault-edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Estilos para el modal de confirmación */
+.vault-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.vault-modal {
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+
+.vault-modal h3 {
+  color: #e74c3c;
+  margin-top: 0;
+  font-size: 1.5em;
+}
+
+.vault-modal p {
+  margin: 15px 0;
+  color: #333;
+}
+
+.vault-modal-warning {
+  color: #e67e22 !important;
+  font-weight: bold;
+}
+
+.vault-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.vault-modal-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 100px;
+}
+
+.vault-modal-cancel {
+  background-color: #ecf0f1;
+  color: #7f8c8d;
+}
+
+.vault-modal-cancel:hover {
+  background-color: #bdc3c7;
+}
+
+.vault-modal-confirm {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.vault-modal-confirm:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .vault-form {
+    flex-direction: column;
+  }
+  
+  .vault-input, 
+  .vault-button {
+    width: 100%;
+  }
+  
+  .vault-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .vault-item-actions {
+    align-self: flex-end;
+  }
+  
+  .vault-edit-form {
+    flex-direction: column;
+  }
+  
+  .vault-edit-input {
+    width: 100%;
+  }
+  
+  .vault-edit-actions {
+    align-self: flex-end;
+  }
+}
+
