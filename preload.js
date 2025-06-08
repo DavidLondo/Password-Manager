@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, clipboard } = require('electron');
 
 // Aquí expondremos funciones seguras al frontend más adelante
 contextBridge.exposeInMainWorld('api', {
@@ -13,4 +13,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   deletePassword: (id, key) => ipcRenderer.invoke('delete-password', id, key),
   updatePassword: (id, newData, key) => ipcRenderer.invoke('update-password', id, newData, key),
   generatePassword: (length = 16) => ipcRenderer.invoke('generate-password', length),
+  copyToClipboard: (text) => {
+    clipboard.writeText(text);
+    return Promise.resolve();
+  },
+  clearClipboard: () => ipcRenderer.invoke('clear-clipboard'),
 });

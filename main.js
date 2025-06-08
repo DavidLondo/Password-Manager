@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, clipboard} = require('electron');
 const path = require('path');
 const { 
   validateMasterKey,
@@ -11,8 +11,8 @@ const {
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,  // Un poco más ancho para acomodar el sidebar
+    height: 650,   // Altura suficiente para mostrar varios elementos
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -71,6 +71,15 @@ ipcMain.handle('update-password', (_event, id, newData, masterKey) => {
 
 ipcMain.handle('generate-password', async (_event, length = 16) => {
   return generatePassword(length);
+});
+
+ipcMain.handle('copy-to-clipboard', (event, text) => {
+  clipboard.writeText(text);
+});
+
+ipcMain.handle('clear-clipboard', () => {
+  clipboard.clear();
+  return true;
 });
 
 app.on('window-all-closed', () => {
