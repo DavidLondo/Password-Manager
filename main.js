@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, shell } = require('electron');
 const path = require('path');
 const { 
   validateMasterKey,
@@ -6,7 +6,7 @@ const {
   deletePassword,
   updatePassword,
   getDecryptedPasswords
- } = require('./security');
+} = require('./security');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -18,6 +18,25 @@ function createWindow() {
   });
 
   win.loadURL('http://localhost:5173');
+
+  // 🔒 Abre los enlaces externos en el navegador predeterminado
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (url.startsWith('http')) {
+      shell.openExternal(url);
+      return { action: 'deny' };
+    }
+    return { action: 'allow' };
+  });
+
+  win.webContents.on('will-navigate', (event, url) => {
+    const currentURL = win.webContents.getURL();
+    const isExternal = new URL(url).origin !== new URL(currentURL).origin;
+
+    if (isExternal) {
+      event.preventDefault();
+      shell.openExternal(url);
+    }
+  });
 }
 
 app.whenReady().then(() => {

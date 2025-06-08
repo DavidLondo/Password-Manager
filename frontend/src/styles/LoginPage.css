@@ -1,88 +1,139 @@
-/* Reset básico para eliminar márgenes y paddings por defecto */
+/* LoginPage.css - Versión mejorada con la estética del Vault */
+
+/* Reset y estilos base */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
+}
 
-/* Centrar todo en pantalla */
+/* Contenedor principal */
 .login-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #3a3a3a, #1c1c1c);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3498db, #2c3e50);
+  padding: 20px;
 }
 
-/* Estilo del formulario */
-.form {
-  background-color: #ffffff;
-  padding: 2rem 2.5rem;
-  border-radius: 15px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+/* Tarjeta del formulario */
+.login-form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   width: 100%;
-  max-width: 400px;
-  animation: fadeIn 0.8s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  max-width: 420px;
+  animation: fadeIn 0.6s ease-out;
 }
 
-.form h1 {
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
+.login-form h1 {
   text-align: center;
-  color: #333;
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-size: 2.2em;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
 }
 
-/* Estilo del input */
-.form input {
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #ccc;
+/* Campos de entrada */
+.login-input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  outline: none;
-  transition: border-color 0.3s ease;
+  font-size: 16px;
+  transition: all 0.3s;
 }
 
-.form input:focus {
-  border-color: #0077ff;
+.login-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
 /* Botón */
-.form button {
-  padding: 0.75rem;
-  font-size: 1rem;
-  background-color: #0077ff;
-  color: #fff;
+.login-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #3498db;
+  color: white;
   border: none;
   border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.form button:hover {
-  background-color: #005fd4;
-}
-
-/* Error */
-.error {
-  color: #d10000;
+  font-size: 16px;
   font-weight: bold;
-  text-align: center;
-  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
 }
 
-/* Animación de entrada */
+.login-button:hover {
+  background-color: #2980b9;
+}
+
+/* Mensaje de error */
+.login-error {
+  color: #e74c3c;
+  text-align: center;
+  margin: 15px 0;
+  font-weight: 500;
+  min-height: 20px;
+}
+
+/* Créditos */
+.login-credits {
+  margin-top: 40px;
+  text-align: center;
+  color: white;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.login-credits a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: opacity 0.3s;
+}
+
+.login-credits a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Animaciones */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-10%);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Efecto de hover para la tarjeta */
+.login-form:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .login-form {
+    padding: 25px 20px;
+  }
+  
+  .login-form h1 {
+    font-size: 1.8em;
   }
 }

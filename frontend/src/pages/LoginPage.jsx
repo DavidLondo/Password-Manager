@@ -1,10 +1,10 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/LoginPage.css";
 
 function LoginPage() {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -15,42 +15,58 @@ function LoginPage() {
       const result = await window.electronAPI.validateMasterKey(password);
 
       if (result.success) {
-        setError('');
-        localStorage.setItem('masterKey', password);
-        navigate('/vault');
+        setError("");
+        localStorage.setItem("masterKey", password);
+        navigate("/vault");
       } else {
-        setError('Clave incorrecta');
-        setPassword('');
+        setError("Clave maestra incorrecta");
+        setPassword("");
         inputRef.current?.focus();
       }
     } catch (err) {
       console.error("Error al validar clave:", err);
-      setError("Error interno");
+      setError("Error al conectar con el servidor");
       inputRef.current?.focus();
     }
   };
 
   return (
     <div className="login-container">
-      <form className="form" onSubmit={handleLogin}>
+      <form className="login-form" onSubmit={handleLogin}>
         <h1>🔐 Gestor de Contraseñas</h1>
 
         <input
           ref={inputRef}
+          className="login-input"
           type="password"
-          placeholder="Clave maestra"
+          placeholder="Ingresa tu clave maestra"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
           autoFocus
         />
 
-        <button type="submit">Entrar</button>
-        {error && <p className="error">{error}</p>}
+        <button type="submit" className="login-button">
+          Acceder al Vault
+        </button>
+
+        {error && <p className="login-error">{error}</p>}
       </form>
+
+      <div className="login-credits">
+        <p>
+          Creado por{" "}
+          <a
+            href="https://github.com/DavidLondo"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            DavidLondo
+          </a>
+        </p>
+      </div>
     </div>
   );
-
 }
 
 export default LoginPage;
