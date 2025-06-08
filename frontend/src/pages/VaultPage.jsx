@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 function VaultPage() {
   const [passwords, setPasswords] = useState([]);
   const [form, setForm] = useState({ site: '', username: '', password: '' });
+  const [editingId, setEditingId] = useState(null);
   const masterKey = localStorage.getItem('masterKey');
 
   useEffect(() => {
@@ -15,12 +16,31 @@ function VaultPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleAdd = async () => {
+  const handleSave = () => {
     if (!form.site || !form.username || !form.password) return;
 
-    const newEntry = await window.electronAPI.addPassword(form, masterKey);
-    setPasswords(prev => [...prev, newEntry]);
+    if (editingId) {
+      const updated = passwords.map(p =>
+        p.id === editingId ? { ...p, ...form } : p
+      );
+      setPasswords(updated);
+      setEditingId(null);
+    } else {
+      const newEntry = { ...form, id: crypto.randomUUID() };
+      window.electronAPI.addPassword(masterKey, newEntry);
+      setPasswords([...passwords, newEntry]);
+    }
+
     setForm({ site: '', username: '', password: '' });
+  };
+
+  const handleEdit = (password) => {
+    setForm({
+      site: password.site,
+      username: password.username,
+      password: password.password
+    });
+    setEditingId(password.id);
   };
 
   const handleDelete = async (id) => {
@@ -38,7 +58,9 @@ function VaultPage() {
         <input name="site" placeholder="Sitio" value={form.site} onChange={handleChange} />
         <input name="username" placeholder="Usuario" value={form.username} onChange={handleChange} />
         <input name="password" placeholder="Contraseña" value={form.password} onChange={handleChange} />
-        <button onClick={handleAdd}>Agregar</button>
+        <button onClick={handleSave}>
+          {editingId ? 'Guardar cambios' : 'Agregar'}
+        </button>
       </div>
 
       <ul>
@@ -46,7 +68,7 @@ function VaultPage() {
           <li key={p.id}>
             <strong>{p.site}</strong> - {p.username} - {p.password}
             <button onClick={() => handleDelete(p.id)}>🗑️</button>
-            {/* Botón de editar lo añadimos en el siguiente paso */}
+            <button onClick={() => handleEdit(p)}>✏️</button>
           </li>
         ))}
       </ul>
