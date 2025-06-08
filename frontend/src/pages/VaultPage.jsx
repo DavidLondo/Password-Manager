@@ -4,6 +4,7 @@ function VaultPage() {
   const [passwords, setPasswords] = useState([]);
   const [form, setForm] = useState({ site: '', username: '', password: '' });
   const [editingId, setEditingId] = useState(null);
+  
   const masterKey = localStorage.getItem('masterKey');
 
   useEffect(() => {
@@ -16,34 +17,32 @@ function VaultPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.site || !form.username || !form.password) return;
 
     if (editingId) {
-      const updated = passwords.map(p =>
-        p.id === editingId ? { ...p, ...form } : p
+      await window.electronAPI.updatePassword(editingId, form, masterKey);
+      setPasswords(prev =>
+        prev.map(p => (p.id === editingId ? { ...p, ...form } : p))
       );
-      setPasswords(updated);
       setEditingId(null);
     } else {
-      const newEntry = { ...form, id: crypto.randomUUID() };
-      window.electronAPI.addPassword(masterKey, newEntry);
-      setPasswords([...passwords, newEntry]);
+      const newEntry = await window.electronAPI.addPassword(form, masterKey);
+      setPasswords(prev => [...prev, newEntry]);
     }
 
     setForm({ site: '', username: '', password: '' });
   };
 
-  const handleEdit = (password) => {
-    setForm({
-      site: password.site,
-      username: password.username,
-      password: password.password
-    });
-    setEditingId(password.id);
+  const handleEdit = (entry) => {
+    setForm({ site: entry.site, username: entry.username, password: entry.password });
+    setEditingId(entry.id);
   };
 
   const handleDelete = async (id) => {
+    const confirmed = window.confirm('¿Estás seguro de que deseas eliminar esta contraseña?');
+    if (!confirmed) return;
+
     await window.electronAPI.deletePassword(id, masterKey);
     setPasswords(prev => prev.filter(p => p.id !== id));
   };
@@ -58,9 +57,7 @@ function VaultPage() {
         <input name="site" placeholder="Sitio" value={form.site} onChange={handleChange} />
         <input name="username" placeholder="Usuario" value={form.username} onChange={handleChange} />
         <input name="password" placeholder="Contraseña" value={form.password} onChange={handleChange} />
-        <button onClick={handleSave}>
-          {editingId ? 'Guardar cambios' : 'Agregar'}
-        </button>
+        <button onClick={handleSave}>{editingId ? 'Guardar cambios' : 'Agregar'}</button>
       </div>
 
       <ul>
