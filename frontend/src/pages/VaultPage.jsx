@@ -35,6 +35,66 @@ function VaultPage() {
     }
   };
 
+  useEffect(() => {
+      const INACTIVITY_TIMEOUT = 2 * 60 * 1000; // 5 minutos
+      let logoutTimer;
+      let warningTimer;
+
+      const showWarningNotification = () => {
+        if (window.electronAPI?.showNotification) {
+          window.electronAPI.showNotification(
+            "Inactividad detectada",
+            "La sesión se cerrará en 30 segundos por inactividad"
+          );
+        } else {
+          // Fallback para navegador
+          new Notification("Inactividad detectada", {
+            body: "La sesión se cerrará en 30 segundos por inactividad",
+            silent: false
+          });
+        }
+      };
+
+      const logout = () => {
+        localStorage.removeItem("masterKey");
+        navigate("/");
+        
+        if (window.electronAPI?.showNotification) {
+          window.electronAPI.showNotification(
+            "Sesión cerrada",
+            "Se ha cerrado la sesión por inactividad"
+          );
+        }
+      };
+
+      const resetTimers = () => {
+        clearTimeout(logoutTimer);
+        clearTimeout(warningTimer);
+        
+        // Mostrar advertencia 30 segundos antes
+        warningTimer = setTimeout(showWarningNotification, INACTIVITY_TIMEOUT - 30000);
+        
+        // Cerrar sesión después del tiempo completo
+        logoutTimer = setTimeout(logout, INACTIVITY_TIMEOUT);
+      };
+
+      // Eventos que reinician el temporizador
+      const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+      events.forEach(event => {
+        window.addEventListener(event, resetTimers);
+      });
+
+      resetTimers(); // Iniciar el temporizador
+
+      return () => {
+        events.forEach(event => {
+          window.removeEventListener(event, resetTimers);
+        });
+        clearTimeout(logoutTimer);
+        clearTimeout(warningTimer);
+      };
+  }, [navigate]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
