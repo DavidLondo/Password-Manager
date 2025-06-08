@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/VaultPage.css";
 
 function VaultPage() {
@@ -8,8 +9,8 @@ function VaultPage() {
   const [editingForm, setEditingForm] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [passwordToDelete, setPasswordToDelete] = useState(null);
-
   const masterKey = localStorage.getItem("masterKey");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (masterKey) {
@@ -39,14 +40,19 @@ function VaultPage() {
       site: entry.site,
       username: entry.username,
       password: entry.password,
-      id: entry.id
+      id: entry.id,
     });
   };
 
   const handleSaveEdit = async () => {
-    if (!editingForm.site || !editingForm.username || !editingForm.password) return;
+    if (!editingForm.site || !editingForm.username || !editingForm.password)
+      return;
 
-    await window.electronAPI.updatePassword(editingForm.id, editingForm, masterKey);
+    await window.electronAPI.updatePassword(
+      editingForm.id,
+      editingForm,
+      masterKey
+    );
     setPasswords((prev) =>
       prev.map((p) => (p.id === editingForm.id ? { ...editingForm } : p))
     );
@@ -74,10 +80,19 @@ function VaultPage() {
     setPasswordToDelete(null);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("masterKey");
+    navigate("/");
+  };
+
   if (!masterKey) return <p>Acceso denegado. No hay clave maestra cargada.</p>;
 
   return (
     <div className="vault-container">
+      <button className="vault-logout-button" onClick={handleLogout}>
+        🔓 Cerrar sesión
+      </button>
+
       <h1 className="vault-title">🔐 Mis Contraseñas</h1>
 
       <div className="vault-form">
@@ -131,14 +146,14 @@ function VaultPage() {
                   onChange={handleEditChange}
                 />
                 <div className="vault-edit-actions">
-                  <button 
-                    className="vault-action-button vault-save-button" 
+                  <button
+                    className="vault-action-button vault-save-button"
                     onClick={handleSaveEdit}
                   >
                     💾
                   </button>
-                  <button 
-                    className="vault-action-button vault-cancel-button" 
+                  <button
+                    className="vault-action-button vault-cancel-button"
                     onClick={cancelEdit}
                   >
                     ❌
@@ -177,16 +192,18 @@ function VaultPage() {
           <div className="vault-modal">
             <h3>Confirmar Eliminación</h3>
             <p>¿Estás seguro de que deseas eliminar esta contraseña?</p>
-            <p className="vault-modal-warning">⚠️ Esta acción no se puede deshacer</p>
+            <p className="vault-modal-warning">
+              ⚠️ Esta acción no se puede deshacer
+            </p>
             <div className="vault-modal-actions">
-              <button 
-                className="vault-modal-button vault-modal-cancel" 
+              <button
+                className="vault-modal-button vault-modal-cancel"
                 onClick={cancelDelete}
               >
                 Cancelar
               </button>
-              <button 
-                className="vault-modal-button vault-modal-confirm" 
+              <button
+                className="vault-modal-button vault-modal-confirm"
                 onClick={handleDelete}
               >
                 Eliminar

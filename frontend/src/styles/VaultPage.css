@@ -221,6 +221,19 @@
   background-color: #c0392b;
 }
 
+.vault-logout-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
 /* Responsive design */
 @media (max-width: 600px) {
   .vault-form {
