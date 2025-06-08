@@ -8,4 +8,8 @@ contextBridge.exposeInMainWorld('api', {
 
 contextBridge.exposeInMainWorld('electronAPI', {
   validateMasterKey: (password) => ipcRenderer.invoke('validate-master-key', password),
+  getPasswords: (key) => ipcRenderer.invoke('get-passwords', key),
+  addPassword: (data, key) => ipcRenderer.invoke('add-password', data, key),
+  deletePassword: (id, key) => ipcRenderer.invoke('delete-password', id, key),
+  updatePassword: (id, newData, key) => ipcRenderer.invoke('update-password', id, newData, key),
 });
