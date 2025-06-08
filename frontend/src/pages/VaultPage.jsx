@@ -85,6 +85,11 @@ function VaultPage() {
     navigate("/");
   };
 
+  const handleGeneratePassword = async () => {
+    const generated = await window.electronAPI.generatePassword(16);
+    setForm(prev => ({ ...prev, password: generated }));
+  };
+
   if (!masterKey) return <p>Acceso denegado. No hay clave maestra cargada.</p>;
 
   return (
@@ -110,13 +115,23 @@ function VaultPage() {
           value={form.username}
           onChange={handleChange}
         />
-        <input
-          className="vault-input"
-          name="password"
-          placeholder="Contraseña"
-          value={form.password}
-          onChange={handleChange}
-        />
+        <div className="vault-input-group">
+          <input
+            className="vault-input"
+            name="password"
+            placeholder="Contraseña"
+            value={form.password}
+            onChange={handleChange}
+          />
+          <button
+            type="button"
+            className="vault-generate-button"
+            onClick={handleGeneratePassword}
+            title="Generar contraseña segura"
+          >
+            ⚙️
+          </button>
+        </div>
         <button className="vault-button" onClick={handleSave}>
           Agregar
         </button>
@@ -186,7 +201,6 @@ function VaultPage() {
         ))}
       </ul>
 
-      {/* Modal de confirmación para eliminar */}
       {showDeleteModal && (
         <div className="vault-modal-overlay">
           <div className="vault-modal">

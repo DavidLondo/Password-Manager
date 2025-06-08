@@ -5,7 +5,8 @@ const {
   addPassword,
   deletePassword,
   updatePassword,
-  getDecryptedPasswords
+  getDecryptedPasswords,
+  generatePassword
 } = require('./security');
 
 function createWindow() {
@@ -66,6 +67,10 @@ ipcMain.handle('delete-password', (_event, id, masterKey) => {
 
 ipcMain.handle('update-password', (_event, id, newData, masterKey) => {
   updatePassword(id, newData, masterKey);
+});
+
+ipcMain.handle('generate-password', async (_event, length = 16) => {
+  return generatePassword(length);
 });
 
 app.on('window-all-closed', () => {

@@ -123,6 +123,19 @@ function updatePassword(id, newData, masterKey) {
   savePasswords(db);
 }
 
+function generatePassword(length = 16) {
+  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$*_';
+  const array = new Uint32Array(length);
+  crypto.getRandomValues(array);
+
+  let password = '';
+  for (let i = 0; i < length; i++) {
+    password += charset[array[i] % charset.length];
+  }
+
+  return password;
+}
+
 module.exports = {
   validateMasterKey,
   encryptData,
@@ -133,4 +146,5 @@ module.exports = {
   addPassword,
   deletePassword,
   updatePassword,
+  generatePassword,
 };

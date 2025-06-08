@@ -12,4 +12,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   addPassword: (data, key) => ipcRenderer.invoke('add-password', data, key),
   deletePassword: (id, key) => ipcRenderer.invoke('delete-password', id, key),
   updatePassword: (id, newData, key) => ipcRenderer.invoke('update-password', id, newData, key),
+  generatePassword: (length = 16) => ipcRenderer.invoke('generate-password', length),
 });
