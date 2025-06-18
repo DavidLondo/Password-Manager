@@ -3,8 +3,10 @@ const path = require('path');
 const crypto = require('crypto');
 const argon2 = require('argon2');
 const { v4: uuidv4  } = require('uuid');
+require('dotenv').config();
 
-const DATA_DIR = path.join(__dirname, 'data');
+//  || path.join(__dirname, 'data')
+const DATA_DIR = process.env.PASS_PATH;
 const CONFIG_PATH = path.join(DATA_DIR, 'master.json');
 const PASSWORDS_PATH = path.join(DATA_DIR, 'passwords.json');
 

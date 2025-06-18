@@ -13,12 +13,16 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1000,
     height: 650,
+    title: "Gestor de Contraseñas",
+    icon: path.join(__dirname, "..", "frontend", "src", "assets", "Logo.ico"),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
 
-  win.loadURL('http://localhost:5173');
+  win.setMenu(null);
+
+  win.loadFile(path.join(__dirname, '../build/index.html'));
 
   // 🔒 Abre los enlaces externos en el navegador predeterminado
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -42,7 +46,7 @@ function createWindow() {
 
 app.whenReady().then(() => {
   createWindow();
-
+  
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
