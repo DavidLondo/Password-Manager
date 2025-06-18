@@ -7,9 +7,14 @@ function LoginPage() {
   const [error, setError] = useState("");
   const inputRef = useRef(null);
   const navigate = useNavigate();
+  const [attempts, setAttempts] = useState(0);
+  const [isLocked, setIsLocked] = useState(false);
+  const [lockTimeLeft, setLockTimeLeft] = useState(0);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (isLocked) return;
 
     try {
       const result = await window.electronAPI.validateMasterKey(password);
@@ -19,9 +24,28 @@ function LoginPage() {
         localStorage.setItem("masterKey", password);
         navigate("/vault");
       } else {
+        const newAttempts = attempts + 1;
+        setAttempts(newAttempts);
         setError("Clave maestra incorrecta");
         setPassword("");
         inputRef.current?.focus();
+
+        if (newAttempts >= 5) {
+          setIsLocked(true);
+          setLockTimeLeft(30); // 30 segundos
+
+          const interval = setInterval(() => {
+            setLockTimeLeft((prev) => {
+              if (prev <= 1) {
+                clearInterval(interval);
+                setIsLocked(false);
+                setAttempts(0);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
+        }
       }
     } catch (err) {
       console.error("Error al validar clave:", err);
@@ -46,8 +70,8 @@ function LoginPage() {
           autoFocus
         />
 
-        <button type="submit" className="login-button">
-          Acceder al Vault
+        <button type="submit" className="login-button" disabled={isLocked}>
+          {isLocked ? `Bloqueado (${lockTimeLeft}s)` : "Acceder al Vault"}
         </button>
 
         {error && <p className="login-error">{error}</p>}
