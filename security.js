@@ -3,10 +3,29 @@ const path = require('path');
 const crypto = require('crypto');
 const argon2 = require('argon2');
 const { v4: uuidv4  } = require('uuid');
+const { app } = require('electron');
 require('dotenv').config();
 
-//  || path.join(__dirname, 'data')
-const DATA_DIR = process.env.PASS_PATH;
+// Ruta hardcodeada a la NAS
+const HARDCODED_PATH = 'Z:\\DAVID\\Secure';
+
+// Verificamos si existe
+let DATA_DIR;
+if (fs.existsSync(HARDCODED_PATH)) {
+  console.log('✅ Usando ruta en NAS:', HARDCODED_PATH);
+  DATA_DIR = HARDCODED_PATH;
+} else {
+  // Fallback si no está disponible (ej. VPN caída)
+  DATA_DIR = path.join(app.getPath('userData'), 'data');
+  console.warn('⚠️ NAS no disponible, usando ruta local:', DATA_DIR);
+
+  // Aseguramos que exista
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+}
+
+// Rutas finales
 const CONFIG_PATH = path.join(DATA_DIR, 'master.json');
 const PASSWORDS_PATH = path.join(DATA_DIR, 'passwords.json');
 

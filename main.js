@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, shell, clipboard} = require('electron');
 const path = require('path');
+require('dotenv').config();
 const { 
   validateMasterKey,
   addPassword,
@@ -14,15 +15,18 @@ function createWindow() {
     width: 1000,
     height: 650,
     title: "Gestor de Contraseñas",
-    icon: path.join(__dirname, "..", "frontend", "src", "assets", "Logo.ico"),
+    icon: path.join(__dirname, "icon.ico"),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
   win.setMenu(null);
 
-  win.loadFile(path.join(__dirname, '../build/index.html'));
+  win.webContents.openDevTools();
+
+  win.loadFile(path.join(__dirname, 'build', 'index.html'));
+  // win.loadURL('http://localhost:5173')
 
   // 🔒 Abre los enlaces externos en el navegador predeterminado
   win.webContents.setWindowOpenHandler(({ url }) => {
